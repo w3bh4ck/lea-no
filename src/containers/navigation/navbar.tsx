@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/common/Icon";
+import Link from "next/link";
 
 const navLinks = [
   {
@@ -48,7 +49,7 @@ const Navbar = () => {
                     <ul className="px-5 text-sm">
                       {link.subLinks &&
                         link.subLinks.map((subLink, i) => (
-                          <li key={`subLink-${i}`} className="text-black text-nowrap cursor-pointer py-2">
+                          <li key={`subLink-${i}`} className="text-black hover:text-primary hover:font-bold text-nowrap cursor-pointer py-2">
                             {subLink}
                           </li>
                         ))}
@@ -61,9 +62,15 @@ const Navbar = () => {
         </NavigationMenu>
       </div>
       <div className="flex gap-4 items-center pt-4">
-        <div className="text-lg text-primary font-medium cursor-pointer">Get a demo Login</div>
+        <div className="text-lg text-primary font-medium cursor-pointer">
+          <Link href={"https://web.noleahealth.com/company-sign-in"}> Get a demo Login</Link>
+        </div>
         <div>
-          <Button className="bg-primary rounded-3xl font-bold h-12 px-6">Try it for free</Button>
+          <Link href={"https://web.noleahealth.com/company-quick-sign-up"}>
+            <Button type="button" className="bg-primary rounded-3xl font-bold h-12 px-6">
+              Try it for free
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
