@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "next/core-web-vitals"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": ["./tsconfig.json", "./commitlint.config.js"]
+  },
+  "ignorePatterns": [
+    "dist",
+    ".eslintrc.cjs",
+    ".eslintrc.json",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.cjs",
+    "tailwind.config.js",
+    "commitlint.config.js",
+    "next.config.mjs",
+    "postcss.config.mjs"
+  ],
+  "plugins": ["react", "@typescript-eslint", "import"],
+  "rules": {
+    "react-refresh/only-export-components": [0, { "allowConstantExport": true }],
+    "no-console": 1,
+    "no-unused-vars": [0, { "args": "after-used", "argsIgnorePattern": "^_" }],
+    "spaced-comment": 0,
+    "no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": [2, { "args": "after-used", "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-empty-object-type": 0,
+    "react-hooks/exhaustive-deps": 0
+  }
+}
