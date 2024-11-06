@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 interface ProfileInitialsProps {
   name: string;
   className?: string;
+  isLarge?: boolean;
 }
 
-export default function ProfileInitials({ name, className = "" }: ProfileInitialsProps) {
+export default function ProfileInitials({ name, className = "", isLarge }: ProfileInitialsProps) {
   const [initials, setInitials] = useState("");
 
   useEffect(() => {
@@ -19,11 +20,22 @@ export default function ProfileInitials({ name, className = "" }: ProfileInitial
   }, [name]);
 
   return (
-    <div
-      className={`flex items-center justify-center md:w-8 md:h-8 h-6 w-6 rounded-full bg-primary text-primary-foreground font-semibold text-[9px] md:text-sm ${className}`}
-      aria-label={`Profile initials for ${name}`}
-    >
-      {initials}
-    </div>
+    <>
+      {!isLarge ? (
+        <div
+          className={`flex items-center justify-center md:w-8 md:h-8 h-6 w-6 rounded-full bg-primary text-primary-foreground font-semibold text-[9px] md:text-sm ${className}`}
+          aria-label={`Profile initials for ${name}`}
+        >
+          {initials}
+        </div>
+      ) : (
+        <div
+          className={`flex items-center justify-center md:w-16 md:h-16 h-6 w-6 rounded-full bg-primary text-primary-foreground font-semibold text-[9px] md:text-sm ${className}`}
+          aria-label={`Profile initials for ${name}`}
+        >
+          {initials}
+        </div>
+      )}
+    </>
   );
 }
