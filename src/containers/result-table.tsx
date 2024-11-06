@@ -2,15 +2,37 @@
 import ProfileInitials from "@/components/common/profile-initials";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { HealthProfessional, healthProfessionals } from "@/mocks/mocks";
-import { Briefcase, Hospital, Mail, MapPin, PhoneCall } from "lucide-react";
-import { useState } from "react";
+import { Briefcase, CircleSlash, Hospital, Mail, MapPin, PhoneCall } from "lucide-react";
+import { FC, useEffect, useState } from "react";
 import SideDrawerWrapper from "./side-drawer-wrapper";
 import { Button } from "@/components/ui/button";
 
 const tableHeaders = ["Contact Name", "Contact Info", "Job Title", "Company Name", "Location"];
 
-const ResultTable = () => {
+interface IProps {
+  searchParams: string;
+}
+
+const ResultTable: FC<IProps> = ({ searchParams }) => {
+  const [hits, setHits] = useState<HealthProfessional[]>([]);
   const [activeProfile, setActiveProfile] = useState<HealthProfessional | null>(null);
+
+  useEffect(() => {
+    const searchTerms = searchParams.toLowerCase();
+    const filteredResults = healthProfessionals.filter((professional) => {
+      const searchableFields = [
+        professional.firstName,
+        professional.lastName,
+        professional.jobTitle,
+        professional.hospital,
+        professional.location,
+      ].map((field) => field.toLowerCase());
+
+      return searchableFields.some((field) => field.includes(searchTerms));
+    });
+    setHits(filteredResults);
+  }, [searchParams]);
+
   return (
     <div className="w-full border  rounded-md">
       <Table>
@@ -24,7 +46,7 @@ const ResultTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {healthProfessionals.map((professional) => (
+          {hits.map((professional) => (
             <TableRow onClick={() => setActiveProfile(professional)} key={`key_${professional.id}`} className="cursor-pointer">
               <TableCell className="font-medium flex gap-4 ">
                 <ProfileInitials name={`${professional?.firstName} ${professional?.lastName}`} />{" "}
@@ -56,9 +78,18 @@ const ResultTable = () => {
           ))}
         </TableBody>
       </Table>
+      {hits.length === 0 && (
+        <div className="py-2">
+          <div className=" flex justify-center">
+            {" "}
+            <CircleSlash size={40} className="text-yellow-400" />
+          </div>
+          <div className="text-center">No relevant data found</div>
+        </div>
+      )}
       <SideDrawerWrapper isOpen={!!activeProfile} onToggle={() => setActiveProfile(null)} header="Profile Details">
         <div className="h-full">
-          <div>
+          <div className="pb-2">
             <div className="flex justify-center">
               {" "}
               <ProfileInitials isLarge className="h-16 w-16" name={`${activeProfile?.firstName} ${activeProfile?.lastName}`} />
@@ -67,7 +98,8 @@ const ResultTable = () => {
               {activeProfile?.firstName} {activeProfile?.lastName}
             </div>
           </div>
-          <div className="mt-6 space-y-4 ">
+
+          <div className="mt-6 space-y-4">
             <div className="flex items-center gap-2">
               <Mail size={16} className="text-primary" />
               <span>{activeProfile?.email}</span>
@@ -120,8 +152,16 @@ const ResultTable = () => {
           </div>
         </div>
         <div className=" md:pt-8 pt-3 bottom-0 w-full">
-          <Button className="w-full" type="button">
-            {"Send an Email"}
+          <Button
+            className="w-full"
+            type="button"
+            onClick={() => {
+              if (activeProfile?.email) {
+                window.location.href = `mailto:${activeProfile.email}`;
+              }
+            }}
+          >
+            Send an Email
           </Button>
         </div>
       </SideDrawerWrapper>

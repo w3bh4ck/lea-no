@@ -15,8 +15,12 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Icon } from "@/components/common/Icon";
 import { navLinks } from "@/mocks/nav-links";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [searchParams, setSearchParams] = useState<string>("");
+  const router = useRouter();
   return (
     <PageWrapper>
       <div className="w-full h-10 md:text-sm text-[8px] bg-[#f6f7f4] flex justify-center items-center text-regular font-medium">
@@ -32,7 +36,9 @@ export default function Home() {
         Used by 1,000+ recruiters
       </div>
       <div className="w-full flex justify-between items-center md:px-8 px-2">
-        <Icon className="md:pt-8 pt-5" width={220} height={70} svg="nolea-logo" />
+        <Link href="/">
+          <Icon className="md:pt-8 pt-5" width={220} height={70} svg="nolea-logo" />
+        </Link>
         <NavigationMenu>
           <NavigationMenuList className="md:gap-6 gap-1 md:pt-5 -pt-2 ">
             {navLinks.map((link, i) => {
@@ -92,8 +98,19 @@ export default function Home() {
         </div>
         <div className=" flex justify-center w-full">
           <div className="relative mt-8 md:w-[600px] w-full">
-            <Input className="md:h-16 h-12 md:text-lg text-md" placeholder="Enter a keyword or job title" />
-            <Button className="absolute right-0 top-0 md:h-16 h-12 md:w-36 md:text-xl text-md">
+            <Input
+              value={searchParams}
+              onChange={(e) => setSearchParams(e.target.value)}
+              className="md:h-16 h-12 md:text-lg text-md"
+              placeholder="Enter a keyword or job title"
+            />
+            <Button
+              disabled={searchParams?.length === 0}
+              onClick={() => {
+                router.push(`/search-result?search=${searchParams}`);
+              }}
+              className="absolute right-0 top-0 md:h-16 h-12 md:w-36 md:text-xl text-md"
+            >
               <Search size={36} /> Search{" "}
             </Button>
           </div>
